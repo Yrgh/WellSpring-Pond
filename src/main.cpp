@@ -2,7 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 #include "Window.h"
-#include "error.h"
+#include "utils/error.h"
 
 /* NOTE:
  * 
