@@ -13,7 +13,7 @@ public:
     Window();
     ~Window();
 
-    inline SDL_Window *get_sdl_ptr() {
+    inline SDL_Window *getSDLPtr() {
         return window;
     }
 

@@ -3,9 +3,10 @@
 #include <iostream>
 #include "Window.h"
 #include "utils/error.h"
+#include "Engine.h"
 
 /* NOTE:
- * 
+ * This is an example program. You may expand on this if you want
 */
 
 int main(int argc, char **argv) {
@@ -18,21 +19,11 @@ int main(int argc, char **argv) {
 
     SDL_Event event;
     bool should_continue = true;
+    Engine::shutdown.subscribe([&should_continue](){
+        should_continue = false;
+    });
     while (should_continue) {
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-            case SDL_EVENT_QUIT:
-                should_continue = false;
-                break;
-            case SDL_EVENT_WINDOW_CLOSE_REQUESTED:
-                // The primary window was closed. SDL may already do this, but this is just to be sure
-                if (event.window.windowID == SDL_GetWindowID(window.get_sdl_ptr())) {
-                    SDL_Quit();
-                    should_continue = false;
-                }
-                break;
-            }
-        }
+        Engine::pollSDLEvents();
     }
 
     return 0;

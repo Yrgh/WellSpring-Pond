@@ -1,11 +1,12 @@
-#include <exception>
+#include <stdexcept>
+
 // Implements a queue through a linked list, but exposes the pointers for your leisure
 template<class T> class QueueList {
 public:
     inline ~QueueList() {
-        Element current = head;
+        Element *current = head;
         while (current) {
-            Element next = current->next;
+            Element *next = current->next;
             delete current;
             current = next;
         }

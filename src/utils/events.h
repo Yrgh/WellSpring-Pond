@@ -1,9 +1,10 @@
 #include "QueueList.h"
+#include <functional>
 
 // Allows you to call multiple function pointers at a time
 template<typename ...Args> class EventRaw {
 public:
-    using Listener = void (*)(Args...);
+    using Listener = std::function<void(Args...)>;
     
     QueueList<Listener> listeners;
     
@@ -45,7 +46,7 @@ public:
 */
 template<typename ...Args> class EventUnhandled {
 public:
-    using Listener = bool (*)(Args...);
+    using Listener = std::function<bool(Args...)>;
     
     QueueList<Listener> listeners;
     
