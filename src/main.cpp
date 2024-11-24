@@ -2,7 +2,7 @@
 #include <SDL3/SDL_main.h>
 #include <iostream>
 #include "Window.h"
-#include "utils/error.h"
+#include "util/error.h"
 #include "Engine.h"
 
 /* NOTE:
@@ -14,13 +14,14 @@ int main(int argc, char **argv) {
         reportFatalSDLError("when initializing video");
     }
 
-    Window window(640, 480, "Window", 0);
+    Window window(640, 480, "Window", SDL_WINDOW_RESIZABLE);
     window.ready();
 
     SDL_Event event;
     bool should_continue = true;
     Engine::shutdown.subscribe([&should_continue](){
         should_continue = false;
+        SDL_Quit();
     });
     while (should_continue) {
         Engine::pollSDLEvents();

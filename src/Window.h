@@ -9,7 +9,7 @@ private:
     bool _is_not_ready = true;
 public:
     // Creates a window
-    Window(int w, int h, const std::string &name, int graphics_type);
+    Window(int w, int h, const std::string &name, uint64_t flags);
     Window();
     ~Window();
 

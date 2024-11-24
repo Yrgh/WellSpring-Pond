@@ -1,9 +1,9 @@
 #include "Window.h"
 
-#include "utils/error.h"
+#include "util/error.h"
 
-Window::Window(int w, int h, const std::string &name, int graphics_type) {
-    window = SDL_CreateWindow(name.c_str(), w, h, graphics_type);
+Window::Window(int w, int h, const std::string &name, uint64_t flags) {
+    window = SDL_CreateWindow(name.c_str(), w, h, flags);
     if (!window) {
         reportFatalSDLError("initializing window");
     }
