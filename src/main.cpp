@@ -14,17 +14,28 @@ int main(int argc, char **argv) {
         reportFatalSDLError("when initializing video");
     }
 
+    if (!SDL_Init(SDL_INIT_EVENTS)) {
+        reportFatalSDLError("when initializing events");
+    }
+
+    if (!SDL_Init(SDL_INIT_AUDIO)) {
+        reportFatalSDLError("when initializing audio");
+    }
+
     Window window(640, 480, "Window", SDL_WINDOW_RESIZABLE);
     window.ready();
 
+    engine.clock.restart();
+
     SDL_Event event;
     bool should_continue = true;
-    Engine::shutdown.subscribe([&should_continue](){
+    engine.shutdown.subscribe([&should_continue](){
         should_continue = false;
         SDL_Quit();
     });
     while (should_continue) {
-        Engine::pollSDLEvents();
+        engine.pollSDLEvents();
+        std::cout << engine.clock.get_secs() << " seconds elapsed\n";
     }
 
     return 0;

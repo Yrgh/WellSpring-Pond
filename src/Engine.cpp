@@ -1,5 +1,7 @@
 #include "Engine.h"
-#include "utils/error.h"
+#include "util/error.h"
+
+using namespace WellSpring;
 
 void Engine::pollSDLEvents() {
     SDL_Event event;
@@ -9,5 +11,14 @@ void Engine::pollSDLEvents() {
     }
 }
 
-STATIC_MEMBER_DECLARE(Engine::shutdown)
-STATIC_MEMBER_DECLARE(Engine::sdl_event_unhandled)
+int Clock::get_ms_since(const TimePoint &point) const {
+    if (!ticking) return 0;
+    return (point - start_of_time).get_ms();
+}
+
+float Clock::get_secs_since(const TimePoint &point) const {
+    if (!ticking) return 0;
+    return (point - start_of_time).get_secs();
+}
+
+Engine engine;
