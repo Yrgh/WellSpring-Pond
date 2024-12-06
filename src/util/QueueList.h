@@ -1,3 +1,4 @@
+#pragma once
 #include <stdexcept>
 
 // Implements a queue through a linked list, but exposes the pointers for your leisure

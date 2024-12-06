@@ -1,9 +1,6 @@
+#pragma once
 #include "util/QueueList.h"
-#include "callable.h"
-
-// NOTE: I had to add "(Listener)" because the compiler didn't like it
-
-// NOTE: Events are currently wonky! It is important that you only use one memory address to store a given functor!
+#include "Callable.h"
 
 // Allows you to call multiple function pointers at a time
 template<typename ...Args> class Event {

@@ -29,22 +29,15 @@ int main(int argc, char **argv) {
 
     engine.clock.restart();
 
-    ThreadGenerator tg;
-    tg.dispatch([](){
-        std::cout << "Stuff\n";
-    });
-
     SDL_Event event;
     bool should_continue = true;
     engine.shutdown.subscribe(callable_lambda<void()>(
         [&](){
             should_continue = false;
+            
+            SDL_Quit();
         }
     ));
-    /*engine.shutdown.subscribe([&should_continue](){
-        should_continue = false;
-        SDL_Quit();
-    });*/
 
     while (should_continue) {
         engine.poll_sdl_events();

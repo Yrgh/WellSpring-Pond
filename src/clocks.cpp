@@ -15,10 +15,10 @@ float WellSpring::Clock::get_secs() const {
     return get_secs_since(start_of_time);
 }
 
-int WellSpring::Clock::get_ms_since(const TimePoint &point) {
+int get_ms_since(const TimePoint &point) {
     return (TimePoint::now() - point).get_ms();
 }
 
-float WellSpring::Clock::get_secs_since(const TimePoint &point) {
+float get_secs_since(const TimePoint &point) {
     return (TimePoint::now() - point).get_secs();
 }

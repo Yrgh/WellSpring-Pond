@@ -24,11 +24,11 @@ public:
     inline float get_secs() const { return float(duration.count()) * 1e-3; }
     
     inline Duration operator+(const Duration &other) {
-        return Duration(duration.count() + other.duration.count());
+        return Duration(chrono::milliseconds(duration.count() + other.duration.count()));
     }
 
     inline Duration operator-(const Duration &other) {
-        return Duration(duration.count() - other.duration.count());
+        return Duration(chrono::milliseconds(duration.count() + other.duration.count()));
     }
 
     OP_EQUALS(Duration, Duration, +)
@@ -62,6 +62,9 @@ public:
     OP_EQUALS(TimePoint, Duration, -)
 };
 
+extern int get_ms_since(const TimePoint &point);
+extern float get_secs_since(const TimePoint &point);
+
 namespace WellSpring {
     class Clock {
     private:
@@ -71,7 +74,5 @@ namespace WellSpring {
         void restart();
         int get_ms() const;
         float get_secs() const;
-        static int get_ms_since(const TimePoint &point);
-        static float get_secs_since(const TimePoint &point);
     };
 };

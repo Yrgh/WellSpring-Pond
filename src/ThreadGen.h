@@ -1,6 +1,8 @@
+#pragma once
 #include <thread>
-#include <functional>
 #include <vector>
+#include "util/RoundQueue.h"
+#include "Callable.h"
 
 class ThreadGenerator {
 private:
@@ -25,7 +27,17 @@ public:
         return -1;
     }
 
+    ~ThreadGenerator() {
+        for (std::thread *t : threads) {
+            t->join();
+            delete t;
+        }
+    }
 
-    inline int get_max_threads() const  { return max_threads; }
-    inline int set_max_threads(int num) { return max_threads = (threads.size() > num) ? threads.size() : num; }
+    inline int get_max_threads() const  {
+        return max_threads; 
+    }
+    inline int set_max_threads(int num) {
+        return max_threads = (threads.size() > num) ? threads.size() : num;
+    }
 };

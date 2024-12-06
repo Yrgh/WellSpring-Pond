@@ -1,5 +1,6 @@
 #include "events.h"
 #include "clocks.h"
+#include "AutoServicer.h"
 #include <SDL3/SDL.h>
 
 #define STATIC_MEMBER_DECLARE(member) decltype(member) member;
@@ -15,6 +16,7 @@ namespace WellSpring {
         Event<> shutdown;
         
         Clock clock;
+        AutoServicer services;
     };
 }
 
