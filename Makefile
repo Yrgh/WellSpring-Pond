@@ -18,3 +18,6 @@ $(TARGET): $(OBJS) | $(BIN_DIR)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	g++ $(FLAGS1) -c $< -o $@ $(FLAGS2)
+
+clean:
+	del /f /q $(subst /,\,$(OBJS))

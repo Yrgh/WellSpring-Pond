@@ -5,6 +5,8 @@
 #include "util/error.h"
 #include "Engine.h"
 
+#include "ThreadGen.h"
+
 /* NOTE:
  * This is an example program. You may expand on this if you want
 */
@@ -27,15 +29,25 @@ int main(int argc, char **argv) {
 
     engine.clock.restart();
 
+    ThreadGenerator tg;
+    tg.dispatch([](){
+        std::cout << "Stuff\n";
+    });
+
     SDL_Event event;
     bool should_continue = true;
-    engine.shutdown.subscribe([&should_continue](){
+    engine.shutdown.subscribe(callable_lambda<void()>(
+        [&](){
+            should_continue = false;
+        }
+    ));
+    /*engine.shutdown.subscribe([&should_continue](){
         should_continue = false;
         SDL_Quit();
-    });
+    });*/
+
     while (should_continue) {
-        engine.pollSDLEvents();
-        std::cout << engine.clock.get_secs() << " seconds elapsed\n";
+        engine.poll_sdl_events();
     }
 
     return 0;
