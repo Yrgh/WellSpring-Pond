@@ -6,13 +6,13 @@
 template<typename ...Args> class Event {
 public:
     using Listener = Callable<void(Args...)>;
-    
-    QueueList<Listener> listeners;
+private:
+    QueueList<Listener> _listeners;
     
     typedef typename QueueList<Listener>::Element Element;
-    
-    inline bool is_subscribed(const Listener &listener) {
-        Element *el = listeners.head;
+public:
+    inline bool isSubscribed(const Listener &listener) {
+        Element *el = _listeners.head;
         while (el) {
             if (el->value == listener) return true;
             el = el->next;
@@ -22,17 +22,17 @@ public:
     
     inline void subscribe(const Listener &listener) {
         if (is_subscribed(listener)) return;
-        listeners.push(listener);
+        _listeners.push(listener);
     }
     
     inline void unsubscribe(const Listener &listener) {
-        if (!listeners.head) return;
-        if (listeners.head->value == listener) {
-            listeners.pop();
+        if (!_listeners.head) return;
+        if (_listeners.head->value == listener) {
+            _listeners.pop();
             return;
         }
-        Element *el = listeners.head->next;
-        Element *last = listeners.head;
+        Element *el = _listeners.head->next;
+        Element *last = _listeners.head;
         while (el != nullptr) {
             if (el->value == listener) {
                 last->next = el->next;
@@ -44,8 +44,8 @@ public:
     }
     
     inline void call(Args... args) const {
-        if (!listeners.head) {return;}
-        Element *el = listeners.head;
+        if (!_listeners.head) {return;}
+        Element *el = _listeners.head;
         while (el != nullptr) {
             el->value(args...);
             el = el->next;
@@ -59,13 +59,13 @@ public:
 template<typename ...Args> class UnhandledEvent {
 public:
     using Listener = Callable<bool(Args...)>;
-    
-    QueueList<Listener> listeners;
+private:
+    QueueList<Listener> _listeners;
     
     typedef typename QueueList<Listener>::Element Element;
-
-    inline bool is_subscribed(const Listener &listener) {
-        Element *el = listeners.head;
+public:
+    inline bool isSubscribed(const Listener &listener) {
+        Element *el = _listeners.head;
         while (el) {
             if (el->value == listener) return true;
             el = el->next;
@@ -75,17 +75,17 @@ public:
     
     inline void subscribe(const Listener &listener) {
         if (is_subscribed(listener)) return;
-        listeners.push(listener);
+        _listeners.push(listener);
     }
     
     inline void unsubscribe(const Listener &listener) {
-        if (!listeners.head) return;
-        if (listeners.head->value == listener) {
-            listeners.pop();
+        if (!_listeners.head) return;
+        if (_listeners.head->value == listener) {
+            _listeners.pop();
             return;
         }
-        Element *el = listeners.head->next;
-        Element *last = listeners.head;
+        Element *el = _listeners.head->next;
+        Element *last = _listeners.head;
         while (el != nullptr) {
             if (el->value == listener) {
                 last->next = el->next;
@@ -97,8 +97,8 @@ public:
     }
     
     inline bool call(Args... args) const {
-        if (!listeners.head) {return false;}
-        Element *el = listeners.head;
+        if (!_listeners.head) {return false;}
+        Element *el = _listeners.head;
         while (el != nullptr) {
             if (el->value(args...)) return true;
             el = el->next;

@@ -16,6 +16,7 @@ Window::Window() : window(nullptr) {
 Window::~Window() {
     if (_is_not_ready) return;
     if (!window) return;
+    _on_destroy.call(this);
     SDL_DestroyWindow(window);
 }
 
