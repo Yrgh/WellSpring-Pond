@@ -1,11 +1,11 @@
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_main.h>
 #include <iostream>
-#include "Window.h"
-#include "util/error.h"
-#include "Engine.h"
+#include <Window.h>
+#include <util/error.h>
+#include <engine/Engine.h>
 
-#include "ThreadGen.h"
+#include <engine/ThreadGen.h>
 
 /* NOTE:
  * This is an example program. You may expand on this if you want

@@ -1,8 +1,8 @@
 #pragma once
 #include <thread>
 #include <vector>
-#include "util/RoundQueue.h"
-#include "Callable.h"
+#include <util/RoundQueue.h>
+#include <Callable.h>
 
 class ThreadGenerator {
 private:

@@ -1,6 +1,6 @@
-#include "events.h"
-#include "clocks.h"
-#include "AutoServicer.h"
+#include <events.h>
+#include <engine/clocks.h>
+#include <engine/AutoServicer.h>
 #include <SDL3/SDL.h>
 
 #define STATIC_MEMBER_DECLARE(member) decltype(member) member;

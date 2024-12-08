@@ -1,6 +1,6 @@
-#include "Window.h"
+#include <Window.h>
 
-#include "util/error.h"
+#include <util/error.h>
 
 Window::Window(int w, int h, const std::string &name, uint64_t flags) {
     window = SDL_CreateWindow(name.c_str(), w, h, flags);

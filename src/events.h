@@ -1,6 +1,6 @@
 #pragma once
-#include "util/QueueList.h"
-#include "Callable.h"
+#include <util/QueueList.h>
+#include <Callable.h>
 
 // Allows you to call multiple function pointers at a time
 template<typename ...Args> class Event {
