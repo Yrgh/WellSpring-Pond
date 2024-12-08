@@ -116,7 +116,7 @@ namespace WellSpring::callable {
     }
     
     template<class T> Callable(Ret (T::*method)(Args...), T *obj) :
-      func(new _FunctionMethod<T, Ret, Args...>(method, obj))
+      _func(new _FunctionMethod<T, Ret, Args...>(method, obj))
     { _func->refcount++; }
     
     Callable(Ret (*f)(Args...)) : _func(new _FunctionFunc<Ret, Args...>(f)) { _func->refcount++; }

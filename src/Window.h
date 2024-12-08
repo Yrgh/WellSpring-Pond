@@ -10,7 +10,7 @@ private:
     bool _is_not_ready = true;
     
     friend class GPUInterface;
-    Event<void(Window *)> _on_destroy;
+    Event<Window *> _on_destroy;
 public:
     // Creates a window
     Window(int w, int h, const std::string &name, uint64_t flags);
