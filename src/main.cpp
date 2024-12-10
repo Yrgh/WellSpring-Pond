@@ -1,8 +1,5 @@
-#include <SDL3/SDL.h>
-#include <SDL3/SDL_main.h>
 #include <iostream>
 #include <Window.h>
-#include <util/error.h>
 #include <engine/Engine.h>
 
 /* NOTE:
@@ -10,24 +7,11 @@
 */
 
 int main(int argc, char **argv) {
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        reportFatalSDLError("when initializing video");
-    }
-
-    if (!SDL_Init(SDL_INIT_EVENTS)) {
-        reportFatalSDLError("when initializing events");
-    }
-
-    if (!SDL_Init(SDL_INIT_AUDIO)) {
-        reportFatalSDLError("when initializing audio");
-    }
-
     Window window(640, 480, "Window", SDL_WINDOW_RESIZABLE);
     window.ready();
 
     engine.clock.restart();
 
-    SDL_Event event;
     bool should_continue = true;
     engine.shutdown.subscribe(generateCallable<void()>(
         [&](){

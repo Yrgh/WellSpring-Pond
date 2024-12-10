@@ -1,5 +1,4 @@
-#include <Window.h>
-
+#include <video/Window.h>
 #include <util/error.h>
 
 Window::Window(int w, int h, const std::string &name, uint64_t flags) {
