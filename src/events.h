@@ -21,7 +21,7 @@ public:
     }
     
     inline void subscribe(const Listener &listener) {
-        if (is_subscribed(listener)) return;
+        if (isSubscribed(listener)) return;
         _listeners.push(listener);
     }
     

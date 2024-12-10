@@ -21,7 +21,8 @@ private:
     } state;
 public:
     void process();
+    void processOnce();
     void add(int d, Callable<void()> f);
-    inline void stop() { state = STARTED; }
-    inline bool is_running() const { return state != STOPPED; }
+    inline void stop() { state = STOPPED; }
+    inline bool isRunning() const { return state != STOPPED; }
 };

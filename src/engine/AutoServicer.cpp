@@ -4,12 +4,16 @@ void AutoServicer::process() {
     state = STARTED;
     while (state != STOPPED) {
         if (state == WAIT) continue;
-        for (int i = 0; i < in_use; ++i) {
-            Service &service = services[i];
-            if (get_ms_since(service.last) >= service.delay) {
-                service.last = TimePoint::now();
-                service.func();
-            }
+        processOnce();
+    }
+}
+
+void AutoServicer::processOnce() {
+    for (int i = 0; i < in_use; ++i) {
+        Service &service = services[i];
+        if (get_ms_since(service.last) >= service.delay) {
+            service.last = TimePoint::now();
+            service.func();
         }
     }
 }

@@ -5,8 +5,6 @@
 #include <util/error.h>
 #include <engine/Engine.h>
 
-#include <engine/ThreadGen.h>
-
 /* NOTE:
  * This is an example program. You may expand on this if you want
 */
@@ -31,7 +29,7 @@ int main(int argc, char **argv) {
 
     SDL_Event event;
     bool should_continue = true;
-    engine.shutdown.subscribe(callable_lambda<void()>(
+    engine.shutdown.subscribe(generateCallable<void()>(
         [&](){
             should_continue = false;
             

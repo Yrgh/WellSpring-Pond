@@ -94,7 +94,7 @@ namespace WellSpring::callable {
       if (other.isValid()) {
         if (_func) {
           _func->refcount--;
-          if (_func->refcout <= 0)
+          if (_func->refcount <= 0)
             delete _func;
         }
         _func = other._func->clone();
@@ -141,13 +141,13 @@ namespace WellSpring::callable {
   template <class F, class C>
   class _CallableLambdaContainer {
   public:
-    static C callable_lambda(F func);
+    static C callableLambda(F func);
   };
 
   template<class F, class R, class... Args>
   class _CallableLambdaContainer<F, Callable<R(Args...)>> {
   public:
-    static Callable<R(Args...)> callable_lambda(F func) {
+    static Callable<R(Args...)> callableLambda(F func) {
       struct SecretStruct {
           F fn;
           R call(Args... args) {
@@ -155,7 +155,7 @@ namespace WellSpring::callable {
           }
       };
       SecretStruct *anon = new SecretStruct{std::forward<F>(func)};
-      Callable<R(Args...)> result = Callable<R(Args...)>::template create_explicit<SecretStruct>(&SecretStruct::call, anon);
+      Callable<R(Args...)> result = Callable<R(Args...)>::template createExplicit<SecretStruct>(&SecretStruct::call, anon);
       return result;
     }
   };
@@ -168,6 +168,6 @@ using WellSpring::callable::Callable;
 #define BIND_METHOD(instance, func) &decltype(instance)::func, &instance
 
 template<class C, class F>
-Callable<C> callableLambda(F func) {
+Callable<C> generateCallable(F func) {
   return WellSpring::callable::_CallableLambdaContainer<F, Callable<C>>::callableLambda(func);
 }
