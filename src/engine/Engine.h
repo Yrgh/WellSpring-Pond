@@ -7,24 +7,23 @@
 #define STATIC_MEMBER_DECLARE(member) decltype(member) member;
 
 namespace WellSpring {
-    class Engine {
-    private:
-    public:
-        // Triggered when an SDL event is polled
-        UnhandledEvent<const SDL_Event &> sdl_event_unhandled;
-        // If one or more events is available execution will pause
-        void poll_sdl_events();
-        Event<> shutdown;
-        
-        Clock clock;
-        AutoServicer services;
-        ThreadGenerator threads;
+  class Engine {
+  public:
+    // Triggered when an SDL event is polled
+    UnhandledEvent<const SDL_Event &> sdl_event_unhandled;
+    // If one or more events is available execution will pause
+    void poll_sdl_events();
+    Event<> shutdown;
 
-        Engine();
+    Clock clock;
+    AutoServicer services;
+    ThreadGenerator threads;
 
-        // My favorite phrase: YNK
-        ~Engine() { shutdown.call(); }
-    };
+    Engine();
+
+    // Preivously we were calling shutdown twice because of this
+    ~Engine() {}
+  };
 }
 
 extern WellSpring::Engine engine;

@@ -39,11 +39,12 @@ namespace WellSpring::callable {
   
   template<class T, class Ret, class... Args> class _FunctionMethod : public _FunctionBase<Ret, Args...> {
   protected:
-    T *_data;
-    
     typedef Ret (T::*FPtr)(Args...);
-    FPtr _func; 
+    FPtr _func;
   public:
+    // It hurt me brain, so I do dis
+    T *_data;
+
     _FuncType getType() const override { return _FuncType::METHOD; }
     Ret call(Args... args) const override { 
       // Should we do it? Yes, but it isn't our job.
@@ -65,10 +66,8 @@ namespace WellSpring::callable {
   template<class T> class Callable;
   
   template<class Ret, class... Args> class Callable<Ret(Args...)> {
-  protected:
     _FunctionBase<Ret, Args...> *_func;
-  private:
-    template <class F, class C> friend class _CallableLambdaContainer;
+    template<class F, class C> friend class _CallableLambdaContainer;
 
     template<class T>
     static Callable createExplicit(Ret (T::*method)(Args...), T *obj) {
@@ -138,31 +137,95 @@ namespace WellSpring::callable {
     }
   };
 
-  template <class F, class C>
-  class _CallableLambdaContainer {
-  public:
-    static C callableLambda(F func);
-  };
+  template <class F, class C> class _CallableLambdaContainer;
 
   template<class F, class R, class... Args>
   class _CallableLambdaContainer<F, Callable<R(Args...)>> {
+    struct SecretStruct {
+        F fn;
+        R call(Args... args) {
+            return fn(args...);
+        }
+    };
   public:
     static Callable<R(Args...)> callableLambda(F func) {
-      struct SecretStruct {
-          F fn;
-          R call(Args... args) {
-              return fn(args...);
-          }
-      };
       SecretStruct *anon = new SecretStruct{std::forward<F>(func)};
-      Callable<R(Args...)> result = Callable<R(Args...)>::template createExplicit<SecretStruct>(&SecretStruct::call, anon);
-      return result;
+      return Callable<R(Args...)>::template createExplicit<SecretStruct>(&SecretStruct::call, anon);;
+    }
+
+    // A nice and ugly one-liner. Is it safe? GOD NO! Does it work? Probably...
+    static void deleteLambda(Callable<R(Args...)> &callable) {
+      delete ((_FunctionMethod<SecretStruct, R, Args...> *)(callable._func))->_data;
+    }
+  };
+
+  // What kinda monster gets summoned when you say this?
+  template<class R, class... Args> class _GeneratedCallableManagerBase {
+  public:
+    Callable<R(Args...)> result;
+    virtual ~_GeneratedCallableManagerBase() {}
+  };
+
+  template<class F, class R, class... Args>
+  class _GeneratedCallableManagerImpl : public _GeneratedCallableManagerBase<R, Args...> {
+  public:
+    ~_GeneratedCallableManagerImpl() {
+      WellSpring::callable::_CallableLambdaContainer<F, Callable<R(Args...)>>::deleteLambda(
+        _GeneratedCallableManagerBase<R, Args...>::result
+      );
+    }
+
+    void create(F func) {
+      _GeneratedCallableManagerBase<R, Args...>::result =
+        WellSpring::callable::_CallableLambdaContainer<F, Callable<R(Args...)>>::callableLambda(func);
+    }
+  };
+
+  template<class T> class FunctorBox;
+
+  template<class R, class... Args> class FunctorBox<R(Args...)> {
+    _GeneratedCallableManagerBase<R, Args...> *gcm;
+  public:
+    template<class F> FunctorBox(F func) {
+      _GeneratedCallableManagerImpl<F, R, Args...> *new_gcm = new _GeneratedCallableManagerImpl<F, R, Args...>;
+      new_gcm->create(func);
+      gcm = new_gcm;
+    }
+
+    FunctorBox(const FunctorBox &other) {
+      gcm = other.gcm;
+      other.gcm = nullptr;
+    }
+
+    FunctorBox &operator=(const FunctorBox &other) {
+      if (gcm) delete gcm;
+      gcm = other.gcm;
+      other.gcm = nullptr;
+    }
+
+    template<class F> FunctorBox &operator=(F func) {
+      if (gcm)
+        delete gcm;
+      _GeneratedCallableManagerImpl<F, R, Args...> *new_gcm = new _GeneratedCallableManagerImpl<F, R, Args...>;
+      new_gcm->create(func);
+      gcm = new_gcm;
+    }
+
+    operator Callable<R(Args...)>() {
+      if (!gcm) throw std::runtime_error("Invalid contents!");
+      return gcm->result;
+    }
+
+    ~FunctorBox() {
+      if (gcm)
+        delete gcm;
     }
   };
 }
 
-// Export Callable
+// Export stuff
 using WellSpring::callable::Callable;
+using WellSpring::callable::FunctorBox;
 
 // NOTE: Use this in a Callable constructor to make a Callable to an instance member function, especially an anonymous one
 #define BIND_METHOD(instance, func) &decltype(instance)::func, &instance
@@ -170,4 +233,9 @@ using WellSpring::callable::Callable;
 template<class C, class F>
 Callable<C> generateCallable(F func) {
   return WellSpring::callable::_CallableLambdaContainer<F, Callable<C>>::callableLambda(func);
+}
+
+template<class C, class F>
+void deleteGeneratedCallable(Callable<C> callable) {
+  return WellSpring::callable::_CallableLambdaContainer<F, Callable<C>>::deleteLambda(callable);
 }
