@@ -20,4 +20,9 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp | $(OBJ_DIR)
 	g++ $(FLAGS1) -c $< -o $@ $(FLAGS2)
 
 clean:
-	del /f /q $(subst /,\,$(OBJS))
+	rm -f bin/main bin/main.* obj/*.* obj/*/*.*
+
+try:
+	make clean
+	make all
+	./bin/main
