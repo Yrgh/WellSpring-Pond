@@ -8,8 +8,8 @@ SRCS := $(wildcard $(SRC_DIR)/*.cpp) $(wildcard $(SRC_DIR)/*/*.cpp)
 OBJS := $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 DEPS := $(OBJS:.o=.d)
 
-FLAGS1 := -MMD -Iinclude -Isrc -Llib
-FLAGS2 := -lSDL3
+FLAGS1 := -Isrc
+FLAGS2 := 
 
 all: $(TARGET)
 
