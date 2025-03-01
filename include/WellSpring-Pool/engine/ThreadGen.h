@@ -1,8 +1,8 @@
 #pragma once
 #include <thread>
 #include <vector>
-#include <util/RoundQueue.h>
-#include <Callable.h>
+#include <core/RoundQueue.h>
+#include <core/Callable.h>
 
 // NOTE: NEVER EVER DISPATCH AN ENDLESS LOOP WITH NO WAY TO STOP IT!!!!!!!!
 

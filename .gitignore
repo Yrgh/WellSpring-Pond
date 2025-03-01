@@ -1,5 +1,14 @@
 .vscode/**
-bin/main
-bin/main.*
-obj/**
 Makefile
+build/**
+CMakeCache.txt
+CMakeFiles/**
+cmake_install.cmake
+*.o
+*.so
+*.dll
+*.dylib
+*.exe
+*.log
+*.tmp
+*.swp
