@@ -7,8 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_subdirectory(external/glm)
 add_subdirectory(external/SDL3)
 
-file(GLOB_RECURSE SOURCES src/*.cpp)
-file(GLOB_RECURSE HEADERS include/*.h include/*.hpp)
+file(GLOB_RECURSE SOURCES src/**.cpp)
+file(GLOB_RECURSE HEADERS include/**.h include/**.hpp)
 
 add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 

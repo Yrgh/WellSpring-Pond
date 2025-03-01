@@ -1,26 +1,33 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <string>
 #include <core/events.h>
+#include <scene/Scene.h>
+#include <string>
+#include <video/Renderer.h>
 
 class Window {
 private:
-    SDL_Window *window;
+  SDL_Window *_window;
 
-    bool _is_not_ready = true;
-    
-    friend class GPUInterface;
-    Event<Window *> _on_destroy;
+  Event<Window *> _on_destroy;
+
+  friend class Renderer;
 public:
-    // Creates a window
-    Window(int w, int h, const std::string &name, uint64_t flags);
-    Window();
-    ~Window();
+  Renderer *renderer;
 
-    inline SDL_Window *getSDLPtr() {
-        return window;
-    }
+  Scene scene;
 
-    // Call this on a variable to make it elligible for destruction
-    void ready();
+  // Creates a window
+  Window(int w, int h, const std::string &name, uint64_t sdl_flags, Renderer *renderer);
+  Window();
+  ~Window();
+
+  Window(const Window &)            = delete;
+  Window &operator=(const Window &) = delete;
+  Window(Window &&)            = delete;
+  Window &operator=(Window &&) = delete;
+
+  SDL_Window *getSDLPtr();
+
+  void draw();
 };
