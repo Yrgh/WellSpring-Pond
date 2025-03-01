@@ -12,6 +12,10 @@ file(GLOB_RECURSE HEADERS include/*.h include/*.hpp)
 
 add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
-target_include_directories(${PROJECT_NAME} PUBLIC include external/glm external/SDL3/include)
+target_include_directories(${PROJECT_NAME} PUBLIC include/WellSpring-Pool external/glm external/SDL3/include)
 
 target_link_libraries(${PROJECT_NAME} SDL3::SDL3)
+
+add_executable(Example src/example.cpp)
+
+target_link_libraries(Example PRIVATE ${PROJECT_NAME})

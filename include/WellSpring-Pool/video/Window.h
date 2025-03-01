@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
 #include <string>
-#include <events.h>
+#include <core/events.h>
 
 class Window {
 private:
