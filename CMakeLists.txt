@@ -16,6 +16,6 @@ target_include_directories(${PROJECT_NAME} PUBLIC include/WellSpring-Pool extern
 
 target_link_libraries(${PROJECT_NAME} SDL3::SDL3)
 
-add_executable(Example src/example.cpp)
+add_executable(Example src/example/main.cpp)
 
 target_link_libraries(Example PRIVATE ${PROJECT_NAME})
