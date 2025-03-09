@@ -8,5 +8,7 @@ class GenericSimpleRenderer : public Renderer {
 public:
   GenericSimpleRenderer(GenericRenderDevice *rd);
 
+  inline GenericSimpleRenderer() : _device(nullptr) {}
+
   void render(const Scene &) override;
 };

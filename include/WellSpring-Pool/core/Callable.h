@@ -16,6 +16,8 @@ namespace WellSpring::callable {
     // other should be of the same type as this
     virtual bool equals(const _FunctionBase *other) const { return true; }
     int refcount = 0;
+
+    virtual ~_FunctionBase() = default;
   };
   
   template<class Ret, class... Args> class _FunctionFunc : public _FunctionBase<Ret, Args...> {
@@ -104,7 +106,7 @@ namespace WellSpring::callable {
       return *this;
     }
 
-    bool operator==(const Callable &other) {
+    bool operator==(const Callable &other) const {
       if (other._func == _func) return true;
       if (other._func->getType() != other._func->getType()) return false;
       return _func->equals(other._func);

@@ -1,33 +1,48 @@
-#include <engine/Engine.h>
+#include <engine/Application.h>
+#include <engine/time.h>
 #include <iostream>
-#include <video/Window.h>
 #include <video/GenericSimpleRenderer.h>
 #include <video/Vulkan/VulkanRenderDevice.h>
+#include <video/Window.h>
+#include <optional>
 
-/* NOTE:
- * This is an example program. You may expand on this if you want
- */
+const int stable_fps = 30;
+
+class APP(Application) {
+  std::optional<VulkanRenderDevice> device;
+  std::optional<GenericSimpleRenderer> renderer;
+  std::optional<Window> window;
+public:
+  void init() {
+    device.emplace();
+    device.value().initSystem();
+    renderer.emplace(&(device.value()));
+    window.emplace(640, 480, "Window", SDL_WINDOW_RESIZABLE | SDL_WINDOW_VULKAN, &(renderer.value()));
+
+    window.value().flashTemporarily();
+  }
+
+  void close() {
+    device.value().cleanupSystem();
+  }
+
+  void stableTick() {
+
+  }
+
+  void renderTick() {
+    window.value().draw();
+  }
+
+  void onInputFrame() {
+
+  }
+};
 
 int main(int argc, char **argv) {
-  GenericSimpleRenderer renderer(new VulkanRenderDevice);
-
-  Window window(640, 480, "Window", SDL_WINDOW_RESIZABLE, &renderer);
-  
-  bool should_continue = true;
-  
-  FunctorBox<void()> shutdown_box = [&]() {
-    std::cout << "Oonnga Booga\n";
-    should_continue = false;
-    SDL_Quit();
-  };
-  
-  engine.shutdown.subscribe(shutdown_box);
-
-  engine.clock.restart();
-
-  while (should_continue) {
-    engine.poll_sdl_events();
-  }
+  Application app;
+  app.run();
+  std::cout << "App done\n";
 
   return 0;
 }

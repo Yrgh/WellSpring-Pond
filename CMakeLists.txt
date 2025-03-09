@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory(external/glm)
 add_subdirectory(external/SDL3)
+add_subdirectory(external/Vulkan-Headers)
 
 file(GLOB_RECURSE SOURCES src/**.cpp)
 file(GLOB_RECURSE HEADERS include/**.h include/**.hpp)

@@ -5,6 +5,9 @@
 class VulkanRenderDevice : public GenericRenderDevice {
 protected:
   void doesNothing() override;
+private:
+  VkInstance instance;
 public:
-  
+  void initSystem() override;
+  void cleanupSystem() override;
 };

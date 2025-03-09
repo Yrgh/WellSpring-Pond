@@ -11,8 +11,8 @@ private:
     
     typedef typename QueueList<Listener>::Element Element;
 public:
-    inline bool isSubscribed(const Listener &listener) {
-        Element *el = _listeners.head;
+    inline bool isSubscribed(const Listener &listener) const {
+        const Element *el = _listeners.head;
         while (el) {
             if (el->value == listener) return true;
             el = el->next;
@@ -31,8 +31,9 @@ public:
             _listeners.pop();
             return;
         }
-        Element *el = _listeners.head->next;
-        Element *last = _listeners.head;
+
+        const Element *el = _listeners.head->next;
+        const Element *last = _listeners.head;
         while (el != nullptr) {
             if (el->value == listener) {
                 last->next = el->next;
@@ -45,7 +46,7 @@ public:
     
     inline void call(Args... args) const {
         if (!_listeners.head) {return;}
-        Element *el = _listeners.head;
+        const Element *el = _listeners.head;
         while (el != nullptr) {
             el->value(args...);
             el = el->next;
@@ -64,8 +65,8 @@ private:
     
     typedef typename QueueList<Listener>::Element Element;
 public:
-    inline bool isSubscribed(const Listener &listener) {
-        Element *el = _listeners.head;
+    inline bool isSubscribed(const Listener &listener) const {
+        const Element *el = _listeners.head;
         while (el) {
             if (el->value == listener) return true;
             el = el->next;
@@ -84,8 +85,9 @@ public:
             _listeners.pop();
             return;
         }
-        Element *el = _listeners.head->next;
-        Element *last = _listeners.head;
+
+        const Element *el = _listeners.head->next;
+        const Element *last = _listeners.head;
         while (el != nullptr) {
             if (el->value == listener) {
                 last->next = el->next;
