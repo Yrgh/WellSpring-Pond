@@ -1,8 +1,7 @@
 #pragma once
 #include <SDL3/SDL.h>
-#include <core/events.h>
+#include <core/core.h>
 #include <scene/Scene.h>
-#include <string>
 #include <video/Renderer.h>
 #include <core/math_renames.h>
 
@@ -13,7 +12,7 @@ enum class WindowDisplayMode {
   WINDOWED_BORDERLESS,
 };
 
-class Window {
+class Window : public Stationary {
 private:
   SDL_Window *_window;
 
@@ -30,7 +29,7 @@ public:
   Scene scene;
 
   // Creates a window
-  Window(int w, int h, const std::string &name, uint64_t sdl_flags, Renderer *renderer);
+  Window(int w, int h, uint64_t sdl_flags, Renderer *renderer);
   Window();
   ~Window();
 
@@ -38,12 +37,6 @@ public:
   Window &getParent();
   void setParent(const Window &);
   void deparent();
-
-  Window(const Window &)            = delete;
-  Window &operator=(const Window &) = delete;
-
-  Window(Window &&) noexcept = delete;
-  Window &operator=(Window &&) noexcept = delete;
 
   SDL_Window *getSDLPtr();
 

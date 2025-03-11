@@ -1,14 +1,14 @@
 #pragma once
 #include <video/Renderer.h>
-#include <video/GenericRenderDevice.h>
+#include <video/RenderDevice.h>
 
 class GenericSimpleRenderer : public Renderer {
-  GenericRenderDevice *_device;
+  RenderDevice *_device;
   
 public:
-  GenericSimpleRenderer(GenericRenderDevice *rd);
+  GenericSimpleRenderer() = default;
 
-  inline GenericSimpleRenderer() : _device(nullptr) {}
+  GenericSimpleRenderer(RenderDevice &);
 
   void render(const Scene &) override;
 };

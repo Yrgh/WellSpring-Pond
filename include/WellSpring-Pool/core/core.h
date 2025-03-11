@@ -1,4 +1,7 @@
 #pragma once
+#define STRINIGFY(arg) #arg
+
+#include <core/classes.h>
 #include <core/Callable.h>
 #include <core/error.h>
 #include <core/events.h>

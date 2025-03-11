@@ -3,10 +3,29 @@
 
 class NonCopyable {
 public:
-    NonCopyable(const NonCopyable &) = delete;
-    const NonCopyable &operator=(const NonCopyable &) = delete;
+  NonCopyable() = default;
+  ~NonCopyable() = default;
+
+  NonCopyable(const NonCopyable &)            = delete;
+  NonCopyable &operator=(const NonCopyable &) = delete;
 };
 
+class NonMovable {
+public:
+  NonMovable() = default;
+  ~NonMovable() = default;
+
+  NonMovable(NonMovable &&) noexcept            = delete;
+  NonMovable &operator=(NonMovable &&) noexcept = delete;
+};
+
+class Stationary : public NonCopyable, public NonMovable {
+public:
+  Stationary() = default;
+  ~Stationary() = default;
+};
+
+/*
 // RTTI marcos:
 #define WSPOLY_BASE(name) \
 public: \
@@ -43,4 +62,4 @@ inline bool _isType(const std::string &type_name) const override { \
     if (parent1::_isType(type_name)) return true; \
     return parent2::_isType(type_name); \
 } \
-private:
+private: */
