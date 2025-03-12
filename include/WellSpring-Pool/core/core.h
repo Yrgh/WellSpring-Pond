@@ -1,5 +1,6 @@
 #pragma once
 #define STRINIGFY(arg) #arg
+#define C_ARR_SIZE(arr) (sizeof(arr)/sizeof(*arr))
 
 #include <core/classes.h>
 #include <core/Callable.h>
