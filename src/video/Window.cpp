@@ -5,8 +5,10 @@ Window::Window(int w, int h, uint64_t sdl_flags, Renderer *inp_renderer) :
 
   renderer->window = this;
   
-  _window = SDL_CreateWindow(STRINIGFY(WSGLOBAL_APP_NAME), w, h, sdl_flags);
-  if (!_window) { reportFatalSDLError("initializing window"); }
+  _window = SDL_CreateWindow("WSGLOBAL_APP_NAME", w, h, sdl_flags);
+  if (!_window) {
+    reportFatalSDLError("initializing window");
+  }
 
   renderer->onWindowEncapsulation(*this);
 }

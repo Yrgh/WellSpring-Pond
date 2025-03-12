@@ -35,3 +35,19 @@ target_link_libraries(${PROJECT_NAME} SDL3::SDL3)
 add_executable(Example src/example/main.cpp)
 
 target_link_libraries(Example PRIVATE ${PROJECT_NAME})
+
+if (WIN32)
+  set(LIB_EXTENSION ".dll")
+elseif(APPLE)
+  set(LIB_EXTENSION ".dylib")
+else()
+  set(LIB_EXTENSION ".so")
+endif()
+
+# Copy the SDL dll to the exe dir
+add_custom_command(
+  TARGET Example POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy
+    ${CMAKE_BINARY_DIR}/external/SDL3/SDL3${LIB_EXTENSION}
+    ${CMAKE_BINARY_DIR}
+)

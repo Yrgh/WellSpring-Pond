@@ -4,9 +4,15 @@ SimpleRenderer::SimpleRenderer(RenderDevice &rd) : _device(&rd) {
   _sdl_gpu = rd.getSDLPtr();
 }
 
+#include <iostream>
+
 void SimpleRenderer::render(const Scene &) {
+  std::cout << "render()...\n";
+
   SDL_GPUCommandBuffer *cmd_buf = SDL_AcquireGPUCommandBuffer(_sdl_gpu);
-  if (!cmd_buf) { reportFatalSDLError("when acquiring GPU command buffer"); }
+  if (!cmd_buf) {
+    reportFatalSDLError("when acquiring GPU command buffer");
+  }
 
   // Acquire the swapchain. Waiting is important, apparently, and we need the width and height for other things.
 
@@ -21,23 +27,24 @@ void SimpleRenderer::render(const Scene &) {
     return;
   }
 
-  // Begin the render pass
-
   // Add the swapchain texture as the color target
   SDL_GPUColorTargetInfo col_targ_infos[] = {
     {
-     .texture     = swapchain,
-     .clear_color = SDL_FColor{0.0f, 0.0f, 1.0f, 1.0f}, // Blue
+      .texture     = swapchain,
+      .clear_color = SDL_FColor{0.0f, 0.0f, 1.0f, 1.0f}, // Blue
       .load_op     = SDL_GPU_LOADOP_CLEAR,
-     .store_op    = SDL_GPU_STOREOP_STORE,
-
+      .store_op    = SDL_GPU_STOREOP_STORE,
      }
   };
 
   // We have to recreate the screen buffers
   if (_last_screen_width != display_x || _last_screen_height != display_y) {
+    std::cout << "New screen\n";
+
     // Out with the old... (potentially)
-    if (_depth_stencil_buf) { SDL_ReleaseGPUTexture(_sdl_gpu, _depth_stencil_buf); }
+    if (_depth_stencil_buf) {
+      SDL_ReleaseGPUTexture(_sdl_gpu, _depth_stencil_buf);
+    }
 
     // Create the depth/stencil buffer and use it as an attachment
     SDL_GPUTextureCreateInfo depth_stencil_create_info = {
@@ -51,7 +58,12 @@ void SimpleRenderer::render(const Scene &) {
 
     // In with the new
     _depth_stencil_buf = SDL_CreateGPUTexture(_sdl_gpu, &depth_stencil_create_info);
-    if (!_depth_stencil_buf) { reportFatalSDLError("when creating depth/stencil buffer"); }
+
+    if (!_depth_stencil_buf) {
+      reportFatalSDLError("when creating depth/stencil buffer");
+    }
+
+    std::cout << "New screen complete\n";
   }
 
   SDL_GPUDepthStencilTargetInfo depth_stencil_targ_info = {
@@ -65,13 +77,29 @@ void SimpleRenderer::render(const Scene &) {
     .clear_stencil    = 0,
   };
 
-  SDL_GPURenderPass *rp =
-    SDL_BeginGPURenderPass(cmd_buf, col_targ_infos, C_ARR_SIZE(col_targ_infos), &depth_stencil_targ_info);
+  std::cout << "Render pass\n";
 
-  if (!rp) { reportFatalSDLError("when creating render pass"); }
+  SDL_GPURenderPass *rp = SDL_BeginGPURenderPass(
+    cmd_buf,
+    col_targ_infos, (uint32_t) C_ARR_SIZE(col_targ_infos),
+    &depth_stencil_targ_info
+  );
+
+  std::cout << "Render pass began\n";
+
+  if (!rp) {
+    reportFatalSDLError("when creating render pass");
+  }
+  
+  SDL_EndGPURenderPass(rp);
+
+  std::cout << "Submitting..\n";
+
+  SDL_SubmitGPUCommandBuffer(cmd_buf);
 
   _last_screen_width  = display_x;
   _last_screen_height = display_y;
+  std::cout << "Done\n";
 }
 
 void SimpleRenderer::onWindowEncapsulation(Window &win) {

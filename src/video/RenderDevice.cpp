@@ -11,7 +11,9 @@ RenderDevice::RenderDevice() {
     , NULL
   );
 
-
+  if (!_sdl_gpu) {
+    reportFatalSDLError("when creating GPU device for RenderDevice");
+  }
 }
 
 RenderDevice::~RenderDevice() {
@@ -30,6 +32,8 @@ Window_GPURID RenderDevice::bindWindow(Window &win) {
 
   Window_GPURID id = _bound_windows.size();
   _bound_windows.push_back(&win);
+
+  return id;
 }
 
 SDL_GPUDevice *RenderDevice::getSDLPtr() {

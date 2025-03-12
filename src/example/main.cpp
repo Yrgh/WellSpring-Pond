@@ -19,11 +19,14 @@ class APP(Application) {
   std::optional<RenderDevice> device;
   std::optional<SimpleRenderer> renderer;
   std::optional<Window> window;
+
+  bool done_drawing = true;
+
 public:
   void init() {
     device.emplace();
     renderer.emplace(device.value());
-    window.emplace(640, 480, SDL_WINDOW_RESIZABLE | SDL_WINDOW_VULKAN, &(renderer.value()));
+    window.emplace(640, 480, SDL_WINDOW_RESIZABLE, &(renderer.value()));
 
     window.value().flashTemporarily();
   }
@@ -39,7 +42,11 @@ public:
   }
 
   void renderTick() {
-    window.value().draw();
+    if (done_drawing) {
+      done_drawing = false;
+      window.value().draw();
+      done_drawing = true;
+    }
   }
 
   void onInputFrame() {
@@ -48,6 +55,8 @@ public:
 };
 
 int main(int argc, char **argv) {
+  SDL_SetHint(SDL_HINT_RENDER_VULKAN_DEBUG, "1");
+
   Application app;
   app.run();
   std::cout << "App done\n";

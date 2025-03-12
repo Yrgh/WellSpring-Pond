@@ -4,10 +4,10 @@
 // Define class APP_NAME to create your app!
 
 template <class Derived> class BaseApplication {
-  int  fps_ms = 1; // 1000 fps
-  bool live;
+  int  _fps_ms = 1; // 1000 fps
+  bool _live;
 
-  TimePoint last_render, last_stable;
+  TimePoint _last_render, _last_stable;
 
 protected:
   // Started immediately before init is called
@@ -79,46 +79,44 @@ public            \
 
 TEMPLATE
 void APP_T::setRenderFPS(int fps) {
-  fps_ms = 1000 / fps;
+  _fps_ms = 1000 / fps;
 }
 
 TEMPLATE
 int APP_T::getRenderFPS() const {
-  return 1000 / fps_ms;
+  return 1000 / _fps_ms;
 }
 
 TEMPLATE
 void APP_T::setRenderDeltaSecs(float d) {
-  fps_ms = 1.0e3f * d;
+  _fps_ms = 1.0e3f * d;
 }
 
 TEMPLATE
 float APP_T::getRenderDeltaSecs() const {
-  return (float)fps_ms / 1.0e3f;
+  return (float) _fps_ms / 1.0e3f;
 }
 
 TEMPLATE
 void APP_T::setRenderDeltaMs(int ms) {
-  fps_ms = ms;
+  _fps_ms = ms;
 }
 
 TEMPLATE
 int APP_T::getRenderDeltaMs() const {
-  return fps_ms;
+  return _fps_ms;
 }
 
 TEMPLATE
 void APP_T::terminate() {
-  live = false;
+  _live = false;
 }
-
-#include <iostream>
 
 TEMPLATE
 void APP_T::run() {
   static SDL_Event event;
 
-  live = true;
+  _live = true;
 
   if (!SDL_Init(SDL_INIT_VIDEO)) { reportFatalSDLError("when initializing video"); }
 
@@ -126,23 +124,28 @@ void APP_T::run() {
 
   if (!SDL_Init(SDL_INIT_AUDIO)) { reportFatalSDLError("when initializing audio"); }
 
-  clock.restart();
-
+  // last_render = TimePoint::now();
+  // last_stable = TimePoint::now();
+  
   APP_THIS->init();
 
-  while (live) {
+  clock.restart();
+
+  while (_live) {
     while (SDL_PollEvent(&event)) {
       if (event.type == SDL_EVENT_QUIT) {
         terminate();
       }
     }
 
-    if (getMsSince(last_render) >= fps_ms) {
-      dispatchThread(&T::renderTick, APP_THIS);
+    if (getMsSince(_last_render) >= _fps_ms) {
+      APP_THIS->renderTick();
+      _last_render = TimePoint::now();
     }
 
-    if (getMsSince(last_stable) >= STABLE_SPEED) {
-      dispatchThread(&T::stableTick, APP_THIS);
+    if (getMsSince(_last_stable) >= STABLE_SPEED) {
+      APP_THIS->stableTick();
+      _last_stable = TimePoint::now();
     }
   }
 

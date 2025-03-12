@@ -17,7 +17,7 @@ private:
 
 public:
   Duration(const chrono::milliseconds &ms) : duration(ms) {}
-  Duration() {}
+  Duration() : duration(chrono::milliseconds::max()) {}
 
   inline int getMs() const {
     return duration.count();
@@ -45,7 +45,7 @@ private:
 
 public:
   TimePoint(const chrono::high_resolution_clock::time_point &time) : point(time) {}
-  TimePoint() {}
+  TimePoint() : point(chrono::high_resolution_clock::time_point::min()) {}
 
   static TimePoint now() {
     return TimePoint(chrono::high_resolution_clock::now());

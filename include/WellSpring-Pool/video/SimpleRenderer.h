@@ -4,15 +4,15 @@
 
 class SimpleRenderer : public Renderer {
 protected:
-  RenderDevice *_device;
+  RenderDevice *_device = nullptr;
 
-  SDL_GPUDevice *_sdl_gpu;
+  SDL_GPUDevice *_sdl_gpu = nullptr;
 
-  SDL_Window *_win;
+  SDL_Window *_win = nullptr;
 
   uint32_t _last_screen_width = 0, _last_screen_height = 0;
 
-  SDL_GPUTexture *_depth_stencil_buf;
+  SDL_GPUTexture *_depth_stencil_buf = nullptr;
   
   void onWindowEncapsulation(Window &) override;
   
