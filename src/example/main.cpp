@@ -29,6 +29,8 @@ public:
     window.emplace(640, 480, SDL_WINDOW_RESIZABLE, &(renderer.value()));
 
     window.value().flashTemporarily();
+
+    setRenderFPS(144); // So we don't explode
   }
 
   void close() {

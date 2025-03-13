@@ -5,7 +5,10 @@
 #include <video/Window.h>
 #include <vector>
 
-typedef size_t Window_GPURID;
+struct GraphicsPipelineInfo {
+  uint32_t num_color_targets;
+  SDL_GPUColorTargetDescription *color_target_descriptions;
+};
 
 // You MUST only create one of these, and have multiple renderers
 class RenderDevice : public Stationary {
@@ -13,13 +16,15 @@ class RenderDevice : public Stationary {
 
   std::vector<Window *> _bound_windows;
 
+  std::vector<SDL_GPUGraphicsPipeline *> _graphics_pipelines;
+
 public:
   RenderDevice();
   ~RenderDevice();
 
-  Window_GPURID bindWindow(Window &);
-
-  SDL_Window *getSDLWindow(Window_GPURID);
+  SDL_Window *bindWindow(Window &);
 
   SDL_GPUDevice *getSDLPtr();
+
+  SDL_GPUGraphicsPipeline *generateGraphicsPipeline(SDL_GPUShaderCreateInfo vsi, SDL_GPUShaderCreateInfo fsi, GraphicsPipelineInfo &info);
 };

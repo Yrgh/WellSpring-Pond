@@ -15,6 +15,12 @@ protected:
   SDL_GPUTexture *_depth_stencil_buf = nullptr;
   
   void onWindowEncapsulation(Window &) override;
+
+  struct ShaderInfo {
+
+  };
+
+  std::vector<ShaderInfo> _shaders;
   
 public:
   SimpleRenderer() = default;
@@ -22,4 +28,9 @@ public:
   SimpleRenderer(RenderDevice &);
 
   void render(const Scene &) override;
+
+  Shader_RRID registerShader(const std::string &path,
+    uint32_t samplers, uint32_t textures, uint32_t buffers, uint32_t uniforms
+  ) override;
+  void createPipeline(Shader_RRID vert, Shader_RRID frag) override;
 };
